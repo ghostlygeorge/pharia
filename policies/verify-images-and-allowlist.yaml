@@ -1,0 +1,32 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: verify-images-and-allowlist
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+  - name: require-allowlisted-registries
+    match:
+      resources:
+        kinds: ["Pod","Deployment","StatefulSet","DaemonSet","Job","CronJob"]
+    validate:
+      message: "Images must be from allowlisted registries and be signed."
+      pattern:
+        spec:
+          containers:
+          - image: "ghcr.io/pharia/*"
+  - name: verify-image-signatures
+    match:
+      resources:
+        kinds: ["Pod","Deployment","StatefulSet","DaemonSet","Job","CronJob"]
+    verifyImages:
+    - imageReferences:
+      - "ghcr.io/pharia/*"
+      attestors:
+      - entries:
+        - keys:
+            publicKeys: |-
+              -----BEGIN PUBLIC KEY-----
+              CosignKey...
+              -----END PUBLIC KEY-----

@@ -1,0 +1,16 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disable-automount-serviceaccount-token
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+  - name: set-automount-false
+    match:
+      resources:
+        kinds: ["Pod","Deployment","ReplicaSet","DaemonSet","StatefulSet","Job","CronJob"]
+    mutate:
+      patchStrategicMerge:
+        spec:
+          automountServiceAccountToken: false

@@ -1,0 +1,28 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: enforce-restricted-pod-security
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+  - name: require-securitycontext
+    match:
+      resources:
+        kinds: ["Pod"]
+    validate:
+      message: "Pod must follow restricted securityContext: runAsNonRoot, no privilege escalation, seccomp RuntimeDefault, readOnlyRootFilesystem, drop ALL caps."
+      pattern:
+        spec:
+          securityContext:
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+          - name: "*"
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                - ALL

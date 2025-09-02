@@ -1,0 +1,35 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-host-access-and-privileged
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+  - name: deny-privileged-and-host-mounts
+    match:
+      resources:
+        kinds: ["Pod"]
+validate:
+  message: "Privileged pods, hostNetwork/hostPID/hostIPC, hostPath mounts or docker.sock mounts are not allowed."
+  deny:
+    conditions:
+      any:
+        - key: "{{request.object.spec.containers[*].securityContext.privileged}}"
+          operator: Equals
+          value: true
+        - key: "{{request.object.spec.hostNetwork}}"
+          operator: Equals
+          value: true
+        - key: "{{request.object.spec.hostPID}}"
+          operator: Equals
+          value: true
+        - key: "{{request.object.spec.hostIPC}}"
+          operator: Equals
+          value: true
+        - key: "{{request.object.spec.volumes[*].hostPath.path}}"
+          operator: NotEquals
+          value: ""
+        - key: "{{request.object.spec.containers[*].volumeMounts[*].name}}"
+          operator: Equals
+          value: "docker-sock"
