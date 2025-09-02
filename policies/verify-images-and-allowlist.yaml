@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: verify-images-and-allowlist
 spec:
-  validationFailureAction: Audit
+  validationFailureAction: Enforce
   background: true
   rules:
   - name: require-allowlisted-registries
@@ -30,3 +30,4 @@ spec:
               -----BEGIN PUBLIC KEY-----
               CosignKey...
               -----END PUBLIC KEY-----
+
