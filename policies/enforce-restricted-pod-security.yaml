@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: enforce-restricted-pod-security
 spec:
-  validationFailureAction: Audit
+  validationFailureAction: Enforce
   background: true
   rules:
   - name: require-securitycontext
@@ -26,3 +26,4 @@ spec:
               capabilities:
                 drop:
                 - ALL
+
