@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: disable-automount-serviceaccount-token
 spec:
-  validationFailureAction: Audit
+  validationFailureAction: Enforce
   background: true
   rules:
   - name: set-automount-false
@@ -14,3 +14,4 @@ spec:
       patchStrategicMerge:
         spec:
           automountServiceAccountToken: false
+
