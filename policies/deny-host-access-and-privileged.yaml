@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: deny-host-access-and-privileged
 spec:
-  validationFailureAction: Audit
+  validationFailureAction: Enforce
   background: true
   rules:
   - name: deny-privileged-and-host-mounts
@@ -32,4 +32,5 @@ validate:
           value: ""
         - key: "{{request.object.spec.containers[*].volumeMounts[*].name}}"
           operator: Equals
+
           value: "docker-sock"
