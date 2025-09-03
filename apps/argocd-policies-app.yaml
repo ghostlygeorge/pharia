@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/your-org/pharia-kyverno-policies.git'
+  repoURL: 'https://github.com/ghostlygeorge/pharia.git'
     targetRevision: policies         # audit branch
     path: policies
   destination:
