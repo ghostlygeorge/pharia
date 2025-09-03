@@ -1,0 +1,65 @@
+name: Kubescape scanning & Kyverno policy checks
+
+on:
+  push:
+    branches: [ master, enforce, policies ]
+    paths:
+      - 'policies/**'
+  pull_request:
+    branches: [ master, enforce, policies ]
+    paths:
+      - 'policies/**'
+
+jobs:
+  kyverno-checks:
+    name: Kyverno Policy Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Install kyverno-cli
+        run: |
+          curl -sL https://github.com/kyverno/kyverno/releases/latest/download/kyverno-cli_linux_x86_64.tar.gz \
+            | tar xz
+          sudo mv kyverno /usr/local/bin/
+
+      - name: Validate policies
+        run: |
+          for policy in $(find policies -name "*.yaml"); do
+            echo "Validating $policy"
+            kyverno validate $policy
+          done
+
+      - name: Dry-run apply policies
+        run: |
+          for policy in $(find policies -name "*.yaml"); do
+            echo "Dry-run applying $policy"
+            kyverno apply $policy --dry-run --namespace test-ns || true
+          done
+
+  kubescape-scan:
+    name: Kubescape Scan (NSA/MITRE)
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: kubescape/github-action@main
+        with:
+          format: json
+          outputFile: results.json
+          severityThreshold: medium
+          frameworks: |
+            nsa,mitre
+
+      - name: Upload Kubescape scan results to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: kubescape-scan-results
+          path: results.json
