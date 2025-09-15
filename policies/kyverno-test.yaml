@@ -21,7 +21,7 @@ results:
     kind: Pod
     result: fail
   - policy: enforce-restricted-pod-security
-    rule: restricted-pod
+    rule: require-securitycontext
     resource: bad-pod
     kind: Pod
     result: fail
