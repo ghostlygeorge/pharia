@@ -1,0 +1,32 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: bad-pod-policy-test-values
+policies:
+  - name: verify-images-and-allowlist
+    rules:
+      - name: require-allowlisted-registries
+        values:
+          allowedRegistries:
+            - ghcr.io
+            - registry.k8s.io
+            - my-org-registry.io
+  - name: disable-automount-serviceaccount-token
+    rules:
+      - name: set-automount-false
+        values:
+          allowServiceAccountAutomount: false
+  - name: deny-host-access-and-privileged
+    rules:
+      - name: deny-privileged-and-host-mounts
+        values:
+          allowPrivileged: false
+          allowedHostPaths: [] # explicitly block all hostPath usage
+  - name: enforce-restricted-pod-security
+    rules:
+      - name: require-securitycontext
+        values:
+          runAsNonRoot: true
+          dropCapabilities:
+            - ALL
+          seccompProfile: "RuntimeDefault"
