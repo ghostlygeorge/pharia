@@ -1,0 +1,37 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: bad-pod-policy-tests
+policies:
+  - deny-host-access-and-privileged.yaml
+  - disable_automount.yaml
+  - enforce-restricted-pod-security.yaml
+  - verify-images-and-allowlist.yaml
+resources:
+  - bad-pod.yaml
+results:
+  - policy: deny-host-access-and-privileged
+    rule: deny-host-access
+    resource: bad-pod
+    kind: Pod
+    result: fail
+  - policy: deny-host-access-and-privileged
+    rule: deny-privileged
+    resource: bad-pod
+    kind: Pod
+    result: fail
+  - policy: disable-automount
+    rule: disallow-serviceaccount-automount
+    resource: bad-pod
+    kind: Pod
+    result: fail
+  - policy: enforce-restricted-pod-security
+    rule: restricted-pod
+    resource: bad-pod
+    kind: Pod
+    result: fail
+  - policy: verify-images-and-allowlist
+    rule: verify-trusted-images
+    resource: bad-pod
+    kind: Pod
+    result: fail
