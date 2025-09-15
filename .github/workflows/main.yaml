@@ -27,7 +27,7 @@ jobs:
 
       - name: Validate policies
         run: |
-          for policy in $(find policies -name "*.yaml"); do
+          for policy in $policies; do
             echo "Validating $policy"
             kyverno test $policy
           done
