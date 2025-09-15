@@ -7,7 +7,7 @@ spec:
   project: default
   source:
   repoURL: 'https://github.com/ghostlygeorge/pharia.git'
-    targetRevision: policies         # audit branch
+    targetRevision: policies         # policies branch
     path: policies
   destination:
     server: https://kubernetes.default.svc
@@ -18,3 +18,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
