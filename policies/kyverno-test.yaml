@@ -11,12 +11,7 @@ resources:
   - bad-pod.yaml
 results:
   - policy: deny-host-access-and-privileged
-    rule: deny-host-access
-    resource: bad-pod
-    kind: Pod
-    result: fail
-  - policy: deny-host-access-and-privileged
-    rule: deny-privileged
+    rule: deny-privileged-and-host-mounts
     resource: bad-pod
     kind: Pod
     result: fail
