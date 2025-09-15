@@ -31,7 +31,7 @@ results:
     kind: Pod
     result: fail
   - policy: verify-images-and-allowlist
-    rule: verify-trusted-images
+    rule: require-allowlisted-registries
     resource: bad-pod
     kind: Pod
     result: fail
