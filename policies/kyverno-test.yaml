@@ -20,8 +20,8 @@ results:
     resource: bad-pod
     kind: Pod
     result: fail
-  - policy: disable-automount
-    rule: disallow-serviceaccount-automount
+  - policy: disable-automount-serviceaccount-token
+    rule: set-automount-false
     resource: bad-pod
     kind: Pod
     result: fail
