@@ -32,7 +32,6 @@ jobs:
             kyverno test $policy
           done
 
-
   kubescape-scan:
     name: Kubescape Scan (NSA/MITRE)
     runs-on: ubuntu-latest
