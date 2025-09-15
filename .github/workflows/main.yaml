@@ -29,15 +29,9 @@ jobs:
         run: |
           for policy in $(find policies -name "*.yaml"); do
             echo "Validating $policy"
-            kyverno validate $policy
+            kyverno test $policy
           done
 
-      - name: Dry-run apply policies
-        run: |
-          for policy in $(find policies -name "*.yaml"); do
-            echo "Dry-run applying $policy"
-            kyverno apply $policy --dry-run --namespace test-ns || true
-          done
 
   kubescape-scan:
     name: Kubescape Scan (NSA/MITRE)
