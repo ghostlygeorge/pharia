@@ -22,8 +22,9 @@ jobs:
       - name: Install kyverno-cli
         run: |
           curl -sL https://github.com/kyverno/kyverno/releases/latest/download/kyverno-cli_linux_x86_64.tar.gz \
-            | tar xz
+             | tar xz
           sudo mv kyverno /usr/local/bin/
+
 
       - name: Validate policies
         run: |
